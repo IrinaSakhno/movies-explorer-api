@@ -17,5 +17,11 @@
   "bugs": {
     "url": "https://github.com/IrinaSakhno/movies-explorer-api/issues"
   },
-  "homepage": "https://github.com/IrinaSakhno/movies-explorer-api#readme"
+  "homepage": "https://github.com/IrinaSakhno/movies-explorer-api#readme",
+  "dependencies": {
+    "express": "^4.18.2"
+  },
+  "devDependencies": {
+    "nodemon": "^3.0.1"
+  }
 }
