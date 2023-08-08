@@ -1,7 +1,6 @@
 const mongoose = require('mongoose');
 const User = require('./user');
-
-const urlSyntax = /https?:\/\/(www)?[0-9a-z\-._~:/?#[\]@!$&'()*+,;=]+#?$/i;
+const regexUrl = require('../utils/regexUrl');
 
 const movieSchema = new mongoose.Schema(
   {
@@ -28,17 +27,17 @@ const movieSchema = new mongoose.Schema(
     image: {
       type: String,
       required: true,
-      validate: urlSyntax,
+      validate: regexUrl,
     },
     trailerLink: {
       type: String,
       required: true,
-      validate: urlSyntax,
+      validate: regexUrl,
     },
     thumbnail: {
       type: String,
       required: true,
-      validate: urlSyntax,
+      validate: regexUrl,
     },
     owner: {
       required: true,
@@ -46,9 +45,8 @@ const movieSchema = new mongoose.Schema(
       ref: User,
     },
     // movieId — id фильма, который содержится в ответе сервиса MoviesExplorer.
-    // Обязательное поле в формате number
     movieId: {
-      type: Number,
+      type: String,
       required: true,
     },
     nameRU: {
@@ -64,12 +62,5 @@ const movieSchema = new mongoose.Schema(
     versionKey: false,
   },
 );
-
-movieSchema.methods.toJSON = () => {
-  const movie = this.toObject();
-  delete movie.password;
-
-  return movie;
-};
 
 module.exports = mongoose.model('movie', movieSchema);
