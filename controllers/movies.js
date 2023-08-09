@@ -52,12 +52,13 @@ const createMovie = (req, res, next) => {
 };
 
 const deleteMovie = (req, res, next) => {
-  Movie.find({ movieId: req.params.movieId })
+  Movie.findOne({ movieId: req.params.movieId })
     .orFail(() => {
       throw new NotFoundError('movie not found');
     })
     .then((movie) => {
-      const movieOwner = movie[0].owner.toString();
+      console.log(JSON.stringify(movie));
+      const movieOwner = movie.owner.toString();
       const userId = req.user._id;
       if (movieOwner !== userId) {
         throw new ForbiddenError('You can only delete your own movies');

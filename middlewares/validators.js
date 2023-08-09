@@ -1,4 +1,3 @@
-// eslint-disable-next-line import/no-extraneous-dependencies
 const { celebrate, Joi } = require('celebrate');
 const regexUrl = require('../utils/regexUrl');
 
@@ -7,6 +6,20 @@ module.exports.signUpValidator = celebrate({
     email: Joi.string().required(),
     password: Joi.string().required(),
     name: Joi.string().required().min(2).max(30),
+  }),
+});
+
+module.exports.signInValidator = celebrate({
+  body: Joi.object().keys({
+    email: Joi.string().required().email(),
+    password: Joi.string().required(),
+  }),
+});
+
+module.exports.updateProfileDataValidator = celebrate({
+  body: Joi.object().keys({
+    email: Joi.string().required().email(),
+    name: Joi.string().required(),
   }),
 });
 
@@ -23,5 +36,11 @@ module.exports.createMovieValidator = celebrate({
     movieId: Joi.number().required(),
     nameRU: Joi.string().required(),
     nameEN: Joi.string().required(),
+  }),
+});
+
+module.exports.deleteMovieValidator = celebrate({
+  params: Joi.object().keys({
+    _id: Joi.string().required().hex().length(24),
   }),
 });
