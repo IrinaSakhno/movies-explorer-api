@@ -30,7 +30,7 @@ const updateProfile = (req, res, next) => {
       res.status(200).send(updatedData);
     })
     .catch((err) => {
-      if (err.name === 'ValidationError') {
+      if (err.message === 'Validation failed') {
         next(new ValidationError('User data is incorrect'));
         return;
       }
@@ -48,7 +48,7 @@ const createUser = (req, res, next) => {
           res.status(201).send({ data: user });
         })
         .catch((err) => {
-          if (err.name === 'ValidationError') {
+          if (err.message === 'Validation failed') {
             next(new ValidationError('User data is incorrect'));
             return;
           }

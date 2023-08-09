@@ -43,7 +43,7 @@ const createMovie = (req, res, next) => {
   })
     .then((movie) => res.status(201).send({ movie }))
     .catch((err) => {
-      if (err.name === 'ValidationError') {
+      if (err.message === 'Validation failed') {
         next(new ValidationError('Movie data is incorrect'));
         return;
       }
