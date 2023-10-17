@@ -21,14 +21,19 @@ const userSchema = new mongoose.Schema(
   },
   {
     versionKey: false,
+    toJSON: {
+      transform(_doc, ret) {
+        const user = ret;
+        delete user.password;
+      },
+    },
+    toObject: {
+      transform(_doc, ret) {
+        const user = ret;
+        delete user.password;
+      },
+    },
   },
 );
-
-userSchema.methods.toJSON = () => {
-  const user = this.toObject();
-  delete user.password;
-
-  return user;
-};
 
 module.exports = mongoose.model('user', userSchema);

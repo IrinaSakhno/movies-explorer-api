@@ -59,7 +59,9 @@ const createUser = (req, res, next) => {
           next(err);
         });
     })
-    .catch(next);
+    .catch((e) => {
+      next(e);
+    });
 };
 
 const login = (req, res, next) => {
@@ -69,19 +71,13 @@ const login = (req, res, next) => {
     .select('+password')
     .orFail(() => new UnauthorizedError('User not found'))
     .then((user) => {
-      bcrypt.compare(String(password), user.password)
+      bcrypt.compare(password, user.password)
         .then((isValidUser) => {
           if (isValidUser) {
-            const jwt = jsonwebtoken.sign({
+            const token = jsonwebtoken.sign({
               _id: user._id,
             }, process.env.NODE_ENV === 'production' ? process.env.JWT_SECRET : 'JWT');
-            res.cookie('jwt', jwt, {
-              maxAge: 3600000 * 24 * 7,
-              httpOnly: true,
-              sameSite: 'none',
-              secure: true,
-            });
-            res.status(200).send({ data: user.toJSON(), jwt });
+            res.status(200).send({ data: user.toJSON(), token });
           } else {
             next(new ValidationError('Wrong user data'));
           }

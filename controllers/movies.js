@@ -52,27 +52,18 @@ const createMovie = (req, res, next) => {
 };
 
 const deleteMovie = (req, res, next) => {
-  Movie.findOne({ movieId: req.params.movieId })
-    .orFail(() => {
-      throw new NotFoundError('movie not found');
-    })
+  Movie.findById(req.params.movieId)
     .then((movie) => {
-      console.log(JSON.stringify(movie));
-      const movieOwner = movie.owner.toString();
-      const userId = req.user._id;
-      if (movieOwner !== userId) {
+      if (!movie) {
+        throw new NotFoundError('movie not found');
+      } else if (!(req.user._id === movie.owner.toString())) {
         throw new ForbiddenError('You can only delete your own movies');
       }
-      Movie.findOneAndRemove({ movieId: req.params.movieId })
-        .orFail(() => {
-          throw new NotFoundError('movie not found');
-        })
-        .then(() => {
-          res.send({ message: 'movie successfully deleted' });
-        })
-        .catch((err) => next(err));
+      return Movie.deleteOne({ _id: movie._id }).then(() => {
+        res.send(movie);
+      });
     })
-    .catch((err) => next(err));
+    .catch(next);
 };
 
 module.exports = {
