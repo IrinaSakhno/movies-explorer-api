@@ -11,6 +11,7 @@ router.post(
   signUpValidator,
   createUser,
 );
+
 router.post(
   '/signin',
   signInValidator,

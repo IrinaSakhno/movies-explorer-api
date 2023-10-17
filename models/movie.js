@@ -44,7 +44,6 @@ const movieSchema = new mongoose.Schema(
       type: mongoose.Schema.Types.ObjectId,
       ref: User,
     },
-    // movieId — id фильма, который содержится в ответе сервиса MoviesExplorer.
     movieId: {
       type: String,
       required: true,
